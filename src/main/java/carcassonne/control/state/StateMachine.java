@@ -70,6 +70,7 @@ public class StateMachine {
      */
     /* package-private */ void changeState(Class<? extends AbstractGameState> stateType) {
         currentState.exit();
+
         if (abortRequested && stateType == StatePlacing.class) {
             abortRequested = false;
             changeState(StateGameOver.class);

@@ -284,9 +284,6 @@ public class Tile {
      * @param spot is the {@link GridSpot} where the tile was placed.
      */
     public void setPosition(GridSpot spot) {
-        if (spot == null) {
-            throw new IllegalArgumentException("Position can't be null, tile cannot be removed.");
-        }
         gridSpot = spot;
     }
 

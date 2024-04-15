@@ -1,6 +1,7 @@
 package carcassonne.control;
 
 import carcassonne.model.grid.GridDirection;
+import carcassonne.model.terrain.RotationDirection;
 import carcassonne.settings.GameSettings;
 import carcassonne.view.GlobalKeyBindingManager;
 
@@ -31,6 +32,13 @@ public interface ControllerFacade {
      * Requests to skip either the current tile placement or the current meeple placement.
      */
     void requestSkip();
+
+
+    void requestRotate(RotationDirection rotationDirection);
+
+
+    void requestRevert();
+
 
     /**
      * Requests to place a tile on the grid.

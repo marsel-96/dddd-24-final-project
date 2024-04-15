@@ -1,18 +1,15 @@
 package carcassonne.view.secondary;
 
-import java.awt.GridBagConstraints;
+import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.swing.BorderFactory;
-import javax.swing.Box;
-import javax.swing.ImageIcon;
-import javax.swing.JButton;
-import javax.swing.JLabel;
+import javax.swing.*;
 import javax.swing.border.Border;
 
 import carcassonne.control.ControllerFacade;
 import carcassonne.model.Player;
+import carcassonne.model.terrain.RotationDirection;
 import carcassonne.model.tile.Tile;
 import carcassonne.model.tile.TileType;
 import carcassonne.settings.GameSettings;
@@ -71,7 +68,7 @@ public class TileView extends SecondaryView {
      */
     public void rotateLeft() {
         if (isVisible() && selectionIndex < tiles.size()) {
-            tiles.get(selectionIndex).rotateLeft();
+            controller.requestRotate(RotationDirection.LEFT);
             updateTileLabel(selectionIndex);
         }
     }
@@ -81,7 +78,7 @@ public class TileView extends SecondaryView {
      */
     public void rotateRight() {
         if (isVisible() && selectionIndex < tiles.size()) {
-            tiles.get(selectionIndex).rotateRight();
+            controller.requestRotate(RotationDirection.RIGHT);
             updateTileLabel(selectionIndex);
         }
     }
@@ -142,10 +139,18 @@ public class TileView extends SecondaryView {
 
     // build the view content
     private void buildContent() {
+
         // create buttons:
-        buttonSkip = new JButton(ImageLoadingUtil.SKIP.createHighDpiImageIcon());
-        buttonRotateLeft = new JButton(ImageLoadingUtil.LEFT.createHighDpiImageIcon());
-        buttonRotateRight = new JButton(ImageLoadingUtil.RIGHT.createHighDpiImageIcon());
+        buttonSkip = new JButton(
+                new ImageIcon(ImageLoadingUtil.SKIP.createHighDpiImageIcon().getImage().getScaledInstance(64, 64, Image.SCALE_SMOOTH))
+        );
+        buttonRotateLeft = new JButton(
+                new ImageIcon(ImageLoadingUtil.LEFT.createHighDpiImageIcon().getImage().getScaledInstance(64, 64, Image.SCALE_SMOOTH))
+        );
+        buttonRotateRight = new JButton(
+                new ImageIcon(ImageLoadingUtil.RIGHT.createHighDpiImageIcon().getImage().getScaledInstance(64, 64, Image.SCALE_SMOOTH))
+        );
+
         // set tool tips:
         buttonSkip.setToolTipText("Don't place tile and skip turn");
         buttonRotateLeft.setToolTipText("Rotate left");
@@ -178,6 +183,7 @@ public class TileView extends SecondaryView {
         }
         constraints.gridy++;
         dialogPanel.add(Box.createVerticalStrut(BOTTOM_SPACE), constraints);
+
     }
 
     // Updates the image of a specific tile label.

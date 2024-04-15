@@ -1,11 +1,10 @@
 package carcassonne.view.secondary;
 
-import java.awt.Color;
-import java.awt.GridBagConstraints;
+import java.awt.*;
 import java.util.HashMap;
 import java.util.Map;
 
-import javax.swing.JButton;
+import javax.swing.*;
 
 import carcassonne.control.ControllerFacade;
 import carcassonne.model.Player;
@@ -35,8 +34,26 @@ public class MeepleView extends SecondaryView {
      */
     public MeepleView(ControllerFacade controller, MainView ui) {
         super(controller, ui);
-        buildButtonSkip();
-        buildButtonGrid();
+        JPanel top = buildButtons();
+        JPanel bottom = buildButtonGrid();
+
+        GridBagConstraints constraints = new GridBagConstraints();
+
+        constraints.fill = GridBagConstraints.BOTH;
+        constraints.weightx = 0.5;
+
+        constraints.gridx = 0;
+        constraints.gridy = 0;
+
+        dialogPanel.add(top, constraints);
+
+        constraints.gridx = 0;
+        constraints.gridy = 1;
+
+        dialogPanel.add(bottom, constraints);
+
+        dialogPanel.setPreferredSize(new Dimension(256, 256));
+
         pack();
     }
 
@@ -56,7 +73,9 @@ public class MeepleView extends SecondaryView {
     }
 
     // build button grid
-    private void buildButtonGrid() {
+    private JPanel buildButtonGrid() {
+        JPanel bottom = new JPanel(new GridBagLayout());
+
         GridBagConstraints constraints = new GridBagConstraints();
         constraints.fill = GridBagConstraints.BOTH;
         constraints.gridwidth = 1;
@@ -67,21 +86,46 @@ public class MeepleView extends SecondaryView {
             button.setToolTipText("Place Meeple on the " + direction.toReadableString() + " of the tile.");
             constraints.gridx = index % 3; // from 0 to 2
             constraints.gridy = index / 3 + 1; // from 1 to 3
-            dialogPanel.add(button, constraints);
+            bottom.add(button, constraints);
             meepleButtons.put(direction, button);
             index++;
         }
+        return bottom;
     }
 
-    private void buildButtonSkip() {
-        JButton buttonSkip = new JButton(ImageLoadingUtil.SKIP.createHighDpiImageIcon());
-        buttonSkip.setToolTipText("Don't place meeple and preserve for later use");
-        defaultButtonColor = buttonSkip.getBackground();
+    private JPanel buildButtons() {
+        JPanel top = new JPanel(new GridBagLayout());
+
+        JButton buttonSkip = new JButton(
+                new ImageIcon(ImageLoadingUtil.SKIP.createHighDpiImageIcon().getImage().getScaledInstance(40, 40, Image.SCALE_SMOOTH))
+        );
+        JButton buttonCancel = new JButton(
+                new ImageIcon(ImageLoadingUtil.CANCEL.createHighDpiImageIcon().getImage().getScaledInstance(40, 40, Image.SCALE_SMOOTH))
+        );
+
         GridBagConstraints constraints = new GridBagConstraints();
-        constraints.fill = GridBagConstraints.BOTH;
-        constraints.gridwidth = 3;
-        dialogPanel.add(buttonSkip, constraints);
+        constraints.fill = GridBagConstraints.HORIZONTAL;
+        constraints.weightx = 0.5;
+
+
+        buttonSkip.setToolTipText("Don't place meeple and preserve for later use");
         buttonSkip.addMouseListener((MouseClickListener) event -> controller.requestSkip());
+
+        buttonCancel.setToolTipText("Revert tile placement");
+        buttonCancel.addMouseListener((MouseClickListener) event -> controller.requestRevert());
+
+        constraints.gridx = 0;
+        constraints.gridy = 0;
+        top.add(buttonCancel, constraints);
+
+        constraints.gridx = 1;
+        constraints.gridy = 0;
+        top.add(buttonSkip, constraints);
+
+        defaultButtonColor = buttonCancel.getBackground();
+        defaultButtonColor = buttonSkip.getBackground();
+
+        return top;
     }
 
     /**

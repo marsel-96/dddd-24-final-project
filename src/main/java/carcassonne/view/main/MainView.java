@@ -254,6 +254,14 @@ public class MainView extends JFrame implements NotifiableView {
     }
 
     /**
+     * Reset Highlights of positions on the grid to indicate that the tile is a possible placement spot.
+     */
+    public void resetHighlights() {
+        tileLayer.resetHighlights();
+        scrollPane.repaintLayers();
+    }
+
+    /**
      * Draws meeple on a tile on the grid.
      * @param tile is the tile where the meeple gets drawn.
      * @param position is the position on the tile where the meeple gets drawn.

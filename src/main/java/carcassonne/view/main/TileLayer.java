@@ -21,6 +21,7 @@ import carcassonne.settings.GameSettings;
 public class TileLayer extends JPanel {
     private static final long serialVersionUID = 1503933201337556131L;
     private final List<TileDepiction> placementHighlights;
+    private final List<TileDepiction> highlights;
     private final transient List<TileDepiction> tileLabels;
     private final transient TileDepiction[][] tileDepictionGrid;
 
@@ -37,6 +38,7 @@ public class TileLayer extends JPanel {
         GridBagConstraints constraints = new GridBagConstraints();
         tileLabels = new ArrayList<>();
         placementHighlights = new ArrayList<>();
+        highlights = new ArrayList<>();
         tileDepictionGrid = new TileDepiction[gridWidth][gridHeight]; // build array of labels.
         Tile defaultTile = new Tile(TileType.Null);
         Tile highlightTile = new Tile(TileType.Null);
@@ -68,6 +70,7 @@ public class TileLayer extends JPanel {
      * @param y is the y-coordinate of that tile.
      */
     public void highlightTile(int x, int y) {
+        highlights.add(tileDepictionGrid[x][y]);
         tileDepictionGrid[x][y].highlightSelection();
     }
 
@@ -105,6 +108,11 @@ public class TileLayer extends JPanel {
      */
     public void refreshPlacementHighlights() {
         placementHighlights.forEach(TileDepiction::refresh);
+    }
+
+    public void resetHighlights() {
+        highlights.forEach(TileDepiction::resetHighlight);
+        highlights.clear();
     }
 
     public void resetPlacementHighlights() {

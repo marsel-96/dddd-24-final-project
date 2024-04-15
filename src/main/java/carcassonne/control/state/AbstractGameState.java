@@ -6,11 +6,15 @@ import carcassonne.model.ai.ArtificialIntelligence;
 import carcassonne.model.grid.Grid;
 import carcassonne.model.grid.GridDirection;
 import carcassonne.model.grid.GridSpot;
+import carcassonne.model.terrain.RotationDirection;
 import carcassonne.model.tile.Tile;
 import carcassonne.model.tile.TileStack;
 import carcassonne.settings.GameSettings;
 import carcassonne.view.ViewFacade;
 import carcassonne.view.main.MainView;
+import carcassonne.view.secondary.TileView;
+
+import java.util.List;
 
 /**
  * Is the abstract state of the state machine.
@@ -118,7 +122,6 @@ public abstract class AbstractGameState { // TODO (HIGH) [AI] separate human mov
         }
         GridSpot spot = grid.getFoundation(); // starting spot.
         views.onMainView(it -> it.setTile(spot.getTile(), spot.getX(), spot.getY()));
-        highlightSurroundings(spot);
         for (int i = 0; i < round.getPlayerCount(); i++) {
             Player player = round.getPlayer(i);
             while (!player.hasFullHand()) {
@@ -127,6 +130,7 @@ public abstract class AbstractGameState { // TODO (HIGH) [AI] separate human mov
         }
         views.onMainView(it -> it.setCurrentPlayer(round.getActivePlayer()));
         changeState(StatePlacing.class);
+        highlightSurroundings(getSelectedTile());
     }
 
     /**
@@ -157,15 +161,47 @@ public abstract class AbstractGameState { // TODO (HIGH) [AI] separate human mov
         views.onScoreboard(it -> it.updateStackSize(tileStack.getSize()));
     }
 
+    public void clearHighlightedMoves() {
+        views.onMainView(MainView::resetHighlights);
+    }
+    
+    public void highlightAllMoves() {
+        views.onMainView(view -> grid.getNeighboursOfActiveSpots()
+                .forEach(it -> view.setSelectionHighlight(it.getX(), it.getY())));
+    }
+
+    public void rotate(RotationDirection rotationDirection) {
+        Tile tile = getSelectedTile();
+
+        if (rotationDirection == RotationDirection.RIGHT)
+            tile.rotateRight();
+        else if (rotationDirection == RotationDirection.LEFT)
+            tile.rotateLeft();
+
+        views.onTileView(TileView::notifyChange);
+
+        highlightSurroundings(tile);
+    }
+
+    public abstract void revert();
+
+    public void highlightPossibleMoves(Tile tile) {
+        List<GridSpot> possibleMoves = grid.getNeighboursOfActiveSpots()
+                .stream()
+                .filter(it -> it.isPlaceable(tile, true))
+                .toList();
+
+        views.onMainView(view -> possibleMoves.forEach(it -> view.setSelectionHighlight(it.getX(), it.getY())));
+    }
+    
     /**
-     * Highlights the surroundings of a {@link GridSpot} on the main view.
-     * @param spot is the {@link GridSpot} that determines where to highlight.
+     * Highlights the possible moves.
      */
-    protected void highlightSurroundings(GridSpot spot) {
-        for (GridSpot neighbor : grid.getNeighbors(spot, true, GridDirection.directNeighbors())) {
-            if (neighbor != null && neighbor.isFree()) {
-                views.onMainView(it -> it.setSelectionHighlight(neighbor.getX(), neighbor.getY()));
-            }
-        }
+    protected void highlightSurroundings(Tile tile) {
+        clearHighlightedMoves();
+        
+        if (true) {
+            highlightPossibleMoves(tile);
+        } else highlightAllMoves();
     }
 }

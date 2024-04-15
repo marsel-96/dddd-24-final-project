@@ -80,4 +80,9 @@ public class StateIdle extends AbstractGameState {
         // No exit functions.
     }
 
+    @Override
+    public void revert() {
+
+    }
+
 }

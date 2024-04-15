@@ -26,6 +26,7 @@ public enum ImageLoadingUtil {
     NULL_TILE("tiles/Null0.png"),
     RIGHT("icons/right.png"),
     SKIP("icons/skip.png"),
+    CANCEL("icons/cancel.png"),
     SPLASH("splash.png");
 
     private static final int PLACEHOLDER_IMAGE_SIZE = 10;

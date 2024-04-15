@@ -25,6 +25,7 @@ public class Player {
     private final List<Tile> handOfTiles;
     private final boolean computerControlled;
     private final List<Meeple> placedMeeples;
+    private boolean revert = false;
 
     /**
      * Simple constructor.
@@ -187,6 +188,14 @@ public class Player {
         boolean isRemoved = placedMeeples.remove(meeple);
         assert isRemoved;
         freeMeeples++;
+    }
+
+    public void setRevert(boolean revert) {
+        this.revert = revert;
+    }
+
+    public boolean getRevert() {
+        return revert;
     }
 
     @Override

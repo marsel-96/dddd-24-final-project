@@ -170,4 +170,15 @@ public class StateManning extends AbstractGameState {
     protected void exit() {
         views.onMeepleView(it -> it.setVisible(false));
     }
+
+    @Override
+    public void revert() {
+        Player player = round.getActivePlayer();
+        player.setRevert(true);
+
+        Tile tile = getSelectedTile();
+        views.onMainView(it -> it.resetMeeplePreview(tile));
+
+        changeState(StatePlacing.class);
+    }
 }

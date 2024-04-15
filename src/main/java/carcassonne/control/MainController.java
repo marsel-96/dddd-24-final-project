@@ -7,6 +7,7 @@ import carcassonne.control.state.StateMachine;
 import carcassonne.model.ai.ArtificialIntelligence;
 import carcassonne.model.ai.RuleBasedAI;
 import carcassonne.model.grid.GridDirection;
+import carcassonne.model.terrain.RotationDirection;
 import carcassonne.settings.GameSettings;
 import carcassonne.view.GlobalKeyBindingManager;
 import carcassonne.view.ViewFacade;
@@ -98,6 +99,16 @@ public class MainController implements ControllerFacade {
     @Override
     public void requestSkip() {
         stateMachine.getCurrentState().skip();
+    }
+
+    @Override
+    public void requestRotate(RotationDirection rotationDirection) {
+        stateMachine.getCurrentState().rotate(rotationDirection);
+    }
+
+    @Override
+    public void requestRevert() {
+        stateMachine.getCurrentState().revert();
     }
 
     /**

@@ -96,4 +96,9 @@ public class StateGameOver extends AbstractGameState {
     protected void exit() {
         views.closeGameStatistics();
     }
+
+    @Override
+    public void revert() {
+        // do nothing.
+    }
 }

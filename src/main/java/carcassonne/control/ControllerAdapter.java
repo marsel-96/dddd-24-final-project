@@ -4,6 +4,7 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 import carcassonne.model.grid.GridDirection;
+import carcassonne.model.terrain.RotationDirection;
 import carcassonne.settings.GameSettings;
 import carcassonne.util.ErrorReportingRunnable;
 import carcassonne.view.GlobalKeyBindingManager;
@@ -46,6 +47,16 @@ public class ControllerAdapter implements ControllerFacade {
     @Override
     public void requestSkip() {
         runInBackground(controller::requestSkip);
+    }
+
+    @Override
+    public void requestRotate(RotationDirection rotationDirection) {
+        runInBackground(() -> controller.requestRotate(rotationDirection));
+    }
+
+    @Override
+    public void requestRevert() {
+        runInBackground(controller::requestRevert);
     }
 
     @Override

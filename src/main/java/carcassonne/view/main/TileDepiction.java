@@ -120,6 +120,16 @@ public class TileDepiction {
     }
 
     /**
+     * Resets the highlight that indicated a possible placement.
+     */
+    public void resetHighlight() {
+        recentlyPlaced = null;
+        if (tile == highlightTile) {
+            setTile(defaultTile);
+        }
+    }
+
+    /**
      * Resets the colored highlight that indicated the recent placement.
      */
     public void resetPlacementHighlight() {

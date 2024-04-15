@@ -101,8 +101,6 @@ public class StatePlacing extends AbstractGameState {
             if (highlightPlacement) {
                 views.onMainView(view -> view.setPlacementHighlight(x, y));
             }
-            GridSpot spot = grid.getSpot(x, y);
-            highlightSurroundings(spot);
             changeState(StateManning.class);
         }
     }
@@ -147,8 +145,30 @@ public class StatePlacing extends AbstractGameState {
     @Override
     protected void entry() {
         Player player = round.getActivePlayer();
+
+        if (player.getRevert()) {
+
+            Tile tile = getSelectedTile();
+            GridSpot spot = tile.getGridSpot();
+            spot.removeTile();
+
+            if(!grid.remove(spot.getX(), spot.getY())) {
+                throw new IllegalStateException("Tile could not be removed from grid.");
+            }
+
+            player.setRevert(false);
+            player.addTile(tile);
+            highlightSurroundings(tile);
+
+            views.onTileView(it -> it.setTiles(player));
+
+            return;
+        }
+
         if (!player.hasFullHand() && !tileStack.isEmpty()) {
-            player.addTile(tileStack.drawTile());
+            Tile tile = tileStack.drawTile();
+            player.addTile(tile);
+            highlightSurroundings(tile);
         }
         updateStackSize();
         if (round.isOver()) {
@@ -167,6 +187,11 @@ public class StatePlacing extends AbstractGameState {
     @Override
     protected void exit() {
         views.onTileView(it -> it.setVisible(false));
+    }
+
+    @Override
+    public void revert() {
+        throw new IllegalStateException("Reverting in StatePlacing is not allowed.");
     }
 
 }

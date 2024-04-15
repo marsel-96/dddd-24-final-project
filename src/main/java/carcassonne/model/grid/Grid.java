@@ -1,13 +1,8 @@
 package carcassonne.model.grid;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.LinkedList;
-import java.util.List;
+import java.util.*;
 
 import carcassonne.model.Player;
-import carcassonne.model.ai.AbstractCarcassonneMove;
 import carcassonne.model.ai.TemporaryTile;
 import carcassonne.model.ai.ZeroSumMove;
 import carcassonne.model.tile.Tile;
@@ -24,6 +19,7 @@ public class Grid {
     private final int width;
     private final int height;
     private final GridSpot[][] spots;
+    private final List<GridSpot> activeSpots;
     private GridSpot foundation;
     private final boolean allowEnclaves;
 
@@ -38,6 +34,7 @@ public class Grid {
         this.height = height;
         this.allowEnclaves = allowEnclaves;
         spots = new GridSpot[width][height];
+        activeSpots = new ArrayList<>();
         for (int y = 0; y < height; y++) {
             for (int x = 0; x < width; x++) {
                 spots[x][y] = new GridSpot(this, x, y);
@@ -147,6 +144,18 @@ public class Grid {
         return neighbors;
     }
 
+    public List<GridSpot> getNeighboursOfActiveSpots() {
+        Set<GridSpot> neighbours = new HashSet<>();
+        for (GridSpot spot : activeSpots) {
+            for (GridSpot neigh : getNeighbors(spot, true, GridDirection.directNeighbors())) {
+                if (neigh != null && neigh.isFree()) {
+                    neighbours.add(neigh);
+                }
+            }
+        }
+        return neighbours.stream().toList();
+    }
+
     /**
      * Returns a collection all possible and legal moves.
      * @param tile is the tile that is placed during the move.
@@ -154,7 +163,7 @@ public class Grid {
      * @param settings are the game settings.
      * @return the collection of all moves.
      */
-    public Collection<? extends AbstractCarcassonneMove> getPossibleMoves(Tile tile, Player player, GameSettings settings) {
+    public List<ZeroSumMove> getPossibleMoves(Tile tile, Player player, GameSettings settings) {
         checkParameters(tile);
         List<ZeroSumMove> possibleMoves = new ArrayList<>();
         for (TileRotation rotation : tile.getPossibleRotations()) {
@@ -234,7 +243,15 @@ public class Grid {
     public boolean place(int x, int y, Tile tile) {
         checkParameters(x, y);
         checkParameters(tile);
-        return spots[x][y].place(tile, allowEnclaves);
+        boolean isPlaced = spots[x][y].place(tile, allowEnclaves);
+        if (isPlaced) {
+            activeSpots.add(spots[x][y]);
+        }
+        return isPlaced;
+    }
+
+    public boolean remove(int x, int y) {
+        return activeSpots.remove(spots[x][y]);
     }
 
     private void checkParameters(GridSpot spot) {
@@ -330,6 +347,7 @@ public class Grid {
         int centerX = (width - 1) / 2;
         int centerY = (height - 1) / 2;
         foundation = spots[centerX][centerY];
+        activeSpots.add(foundation);
         foundation.forcePlacement(new Tile(tileType));
     }
 }

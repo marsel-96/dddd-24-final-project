@@ -22,6 +22,7 @@ import carcassonne.view.util.GameMessage;
 public enum ImageLoadingUtil {
     EMBLEM("emblem.png"),
     HIGHLIGHT("highlight.png"),
+    MAIN("icons/icon.png"),
     LEFT("icons/left.png"),
     NULL_TILE("tiles/Null0.png"),
     RIGHT("icons/right.png"),

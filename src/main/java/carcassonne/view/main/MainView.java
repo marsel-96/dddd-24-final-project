@@ -3,8 +3,7 @@ package carcassonne.view.main;
 import static carcassonne.view.main.ZoomMode.FAST;
 import static carcassonne.view.main.ZoomMode.SMOOTH;
 
-import java.awt.BorderLayout;
-import java.awt.Dimension;
+import java.awt.*;
 
 import javax.swing.ActionMap;
 import javax.swing.ImageIcon;
@@ -17,6 +16,7 @@ import carcassonne.control.ControllerFacade;
 import carcassonne.model.Player;
 import carcassonne.model.grid.GridDirection;
 import carcassonne.model.tile.Tile;
+import carcassonne.util.ImageLoadingUtil;
 import carcassonne.view.GlobalKeyBindingManager;
 import carcassonne.view.NotifiableView;
 import carcassonne.view.PaintShop;
@@ -321,12 +321,15 @@ public class MainView extends JFrame implements NotifiableView {
         setJMenuBar(menuBar);
         setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         setLayout(new BorderLayout());
+        Image icon = ImageLoadingUtil.MAIN.createHighDpiImage();
+        setIconImage(icon);
         scrollPane = LookAndFeelUtil.createModifiedScrollpane();
         scrollPane.addLayers(meepleLayer, tileLayer);
         scrollPane.addZoomListener(() -> zoomIn(FAST), () -> zoomOut(FAST));
         add(scrollPane, BorderLayout.CENTER);
         setMinimumSize(MINIMAL_WINDOW_SIZE);
         addWindowListener(new WindowMaximizationAdapter(this));
+
         pack();
     }
 

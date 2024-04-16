@@ -200,7 +200,7 @@ public abstract class AbstractGameState { // TODO (HIGH) [AI] separate human mov
     protected void highlightSurroundings(Tile tile) {
         clearHighlightedMoves();
         
-        if (true) {
+        if (settings.isAdvancedTileHighlight()) {
             highlightPossibleMoves(tile);
         } else highlightAllMoves();
     }

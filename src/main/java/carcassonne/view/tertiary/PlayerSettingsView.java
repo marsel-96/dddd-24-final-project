@@ -51,6 +51,7 @@ public class PlayerSettingsView extends JDialog implements NotifiableView {
     private static final String HAND_TOOL_TIP = "Number of tiles on the player's hand";
     private static final String HAND = "Hand of Tiles:";
     private static final String MEEPLE_RULES = "Meeple Placement on:";
+    private static final String TILE_HIGHLIGHT = "Allow advanced tile highlight:";
     private static final String MEEPLE_RULES_TOOL_TIP = "Allow or forbid placing meeples on certain terrain";
     private static final String FORTIFYING = " Allow Fortifying Own Patterns:";
     private static final String FORTIFYING_TOOL_TIP = "Allow or forbid directly placing meeples on own patterns";
@@ -119,6 +120,7 @@ public class PlayerSettingsView extends JDialog implements NotifiableView {
         addWithBox(mainPanel, createPlayerPanel());
         addWithBox(mainPanel, createAIAestheticPanel());
         addWithBox(mainPanel, createPlacementRulePanel());
+        addWithBox(mainPanel, createTileHighlightPanel());
         addWithBox(mainPanel, createScoreSplittingPanel());
         addWithBox(mainPanel, createDualPanel());
         mainPanel.add(createCloseButton());
@@ -247,6 +249,15 @@ public class PlayerSettingsView extends JDialog implements NotifiableView {
         for (TerrainType type : TerrainType.basicTerrain()) {
             createPlacementRuleButton(type, panel);
         }
+        return panel;
+    }
+
+    private JPanel createTileHighlightPanel() {
+        JPanel panel = createBasicPanel(TILE_HIGHLIGHT);
+        JCheckBox checkBox = new JCheckBox();
+        checkBox.setSelected(settings.isAdvancedTileHighlight());
+        checkBox.addActionListener(event -> settings.setAdvancedTileHighlight(checkBox.isSelected()));
+        panel.add(checkBox);
         return panel;
     }
 

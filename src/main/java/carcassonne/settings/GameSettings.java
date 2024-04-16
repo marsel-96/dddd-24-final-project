@@ -66,6 +66,9 @@ public class GameSettings {
     private boolean gridSizeChanged;
     private final List<NotifiableView> changeListeners;
 
+    // DDDD
+    private boolean advancedTileHighlight;
+
     /**
      * Creates a settings instance. Instances hold different setting values when one is changed.
      */
@@ -82,6 +85,7 @@ public class GameSettings {
         stackSizeMultiplier = 1;
         gridWidth = 29;
         gridHeight = 19;
+        advancedTileHighlight = true;
         allowEnclaves = true;
         changeListeners = new ArrayList<>();
     }
@@ -305,6 +309,14 @@ public class GameSettings {
         notifyListeners();
     }
 
+    public boolean isAdvancedTileHighlight() {
+        return advancedTileHighlight;
+    }
+
+    public void setAdvancedTileHighlight(boolean advancedTileHighlight) {
+        this.advancedTileHighlight = advancedTileHighlight;
+    }
+
     /**
      * Sets the value for the split points option.
      * @param splitPatternScore determines if points of a pattern should be split instead of every player getting the score.
@@ -354,4 +366,7 @@ public class GameSettings {
     public static String getMeeplePath(TerrainType type, boolean isTemplate) { // TODO (MEDIUM) [UTILS] move to image loading utility class?
         return MEEPLE_PATH + type.toString().toLowerCase(Locale.UK) + (isTemplate ? TEMPLATE : EMPTY) + PNG;
     }
+
+
+
 }

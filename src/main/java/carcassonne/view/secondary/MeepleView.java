@@ -44,7 +44,8 @@ public class MeepleView extends SecondaryView {
 
         constraints.gridx = 0;
         constraints.gridy = 0;
-
+        constraints.ipady = 5;
+        constraints.ipadx = 5;
         dialogPanel.add(top, constraints);
 
         constraints.gridx = 0;
@@ -52,7 +53,7 @@ public class MeepleView extends SecondaryView {
 
         dialogPanel.add(bottom, constraints);
 
-        dialogPanel.setPreferredSize(new Dimension(256, 256));
+        // dialogPanel.setPreferredSize(new Dimension(256, 256));
 
         pack();
     }
@@ -97,16 +98,15 @@ public class MeepleView extends SecondaryView {
         JPanel top = new JPanel(new GridBagLayout());
 
         JButton buttonSkip = new JButton(
-                new ImageIcon(ImageLoadingUtil.SKIP.createHighDpiImageIcon().getImage().getScaledInstance(40, 40, Image.SCALE_SMOOTH))
+                ImageLoadingUtil.SKIP.createHighDpiImageIcon(32, 32)
         );
         JButton buttonCancel = new JButton(
-                new ImageIcon(ImageLoadingUtil.CANCEL.createHighDpiImageIcon().getImage().getScaledInstance(40, 40, Image.SCALE_SMOOTH))
+                ImageLoadingUtil.CANCEL.createHighDpiImageIcon(32, 32)
         );
 
         GridBagConstraints constraints = new GridBagConstraints();
         constraints.fill = GridBagConstraints.HORIZONTAL;
         constraints.weightx = 0.5;
-
 
         buttonSkip.setToolTipText("Don't place meeple and preserve for later use");
         buttonSkip.addMouseListener((MouseClickListener) event -> controller.requestSkip());

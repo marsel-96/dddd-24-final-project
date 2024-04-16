@@ -142,13 +142,13 @@ public class TileView extends SecondaryView {
 
         // create buttons:
         buttonSkip = new JButton(
-                new ImageIcon(ImageLoadingUtil.SKIP.createHighDpiImageIcon().getImage().getScaledInstance(64, 64, Image.SCALE_SMOOTH))
+                ImageLoadingUtil.SKIP.createHighDpiImageIcon(32, 32)
         );
         buttonRotateLeft = new JButton(
-                new ImageIcon(ImageLoadingUtil.LEFT.createHighDpiImageIcon().getImage().getScaledInstance(64, 64, Image.SCALE_SMOOTH))
+                ImageLoadingUtil.LEFT.createHighDpiImageIcon(32, 32)
         );
         buttonRotateRight = new JButton(
-                new ImageIcon(ImageLoadingUtil.RIGHT.createHighDpiImageIcon().getImage().getScaledInstance(64, 64, Image.SCALE_SMOOTH))
+                ImageLoadingUtil.RIGHT.createHighDpiImageIcon(32, 32)
         );
 
         // set tool tips:

@@ -5,9 +5,9 @@ import java.time.Instant;
 
 public record TelemetryData(
         String userId,
-        String gameVersion,
+        boolean advancedTileHighlight,
         String sessionId,
-        String roundId,
+        int roundId,
         int clicks,
         int misclicks,
         String telemetry,

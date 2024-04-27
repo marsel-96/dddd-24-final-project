@@ -37,7 +37,7 @@ public class TelemetryManager {
     private final Timer mousePositionCapture;
     private final java.util.List<int[]> mousePositions;
 
-    private boolean enabled = false;
+    private final boolean enabled = true;
 
     public void addCancelClick() {
         this.cancelClicks++;

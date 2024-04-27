@@ -49,6 +49,7 @@ public class TileDepiction {
              */
             @Override
             public void mouseClicked(MouseEvent event) {
+                label.getParent().requestFocus();
                 controller.requestTilePlacement(x, y);
             }
 

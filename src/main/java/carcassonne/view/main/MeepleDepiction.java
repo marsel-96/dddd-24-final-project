@@ -41,7 +41,7 @@ public class MeepleDepiction {
         preview = false;
         mouseAdapter = new MouseAdapter() {
             @Override
-            public void mouseClicked(MouseEvent event) {
+            public void mousePressed(MouseEvent event) {
                 if (SwingUtilities.isLeftMouseButton(event)) {
                     controller.requestMeeplePlacement(direction);
                 }

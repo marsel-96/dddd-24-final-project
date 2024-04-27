@@ -38,7 +38,7 @@ public class PlacementButtonMouseAdapter extends MouseAdapter {
      * @param event is the <code>MouseEvent</code> of the click.
      */
     @Override
-    public void mouseClicked(MouseEvent event) {
+    public void mousePressed(MouseEvent event) {
         if (button.isHackyEnabled() && SwingUtilities.isLeftMouseButton(event)) {
             controller.requestMeeplePlacement(direction);
         }

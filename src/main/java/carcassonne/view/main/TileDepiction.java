@@ -42,14 +42,9 @@ public class TileDepiction {
         label = new JLabel();
         reset();
         label.addMouseListener(new MouseAdapter() {
-            /**
-             * Method for processing mouse clicks on the <code>TileImage</code> of the class. notifies the
-             * <code>MainController</code> of the class.
-             * @param e is the <code>MouseEvent</code> of the click.
-             */
+
             @Override
-            public void mouseClicked(MouseEvent event) {
-                label.getParent().requestFocus();
+            public void mousePressed(MouseEvent e) {
                 controller.requestTilePlacement(x, y);
             }
 

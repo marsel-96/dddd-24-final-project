@@ -85,7 +85,7 @@ public class GameSettings {
         stackSizeMultiplier = 1;
         gridWidth = 29;
         gridHeight = 19;
-        advancedTileHighlight = true;
+        advancedTileHighlight = false;
         allowEnclaves = true;
         changeListeners = new ArrayList<>();
     }

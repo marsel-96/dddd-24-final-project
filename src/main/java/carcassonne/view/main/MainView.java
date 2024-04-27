@@ -4,13 +4,10 @@ import static carcassonne.view.main.ZoomMode.FAST;
 import static carcassonne.view.main.ZoomMode.SMOOTH;
 
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
-import javax.swing.ActionMap;
-import javax.swing.ImageIcon;
-import javax.swing.InputMap;
-import javax.swing.JComponent;
-import javax.swing.JFrame;
-import javax.swing.WindowConstants;
+import javax.swing.*;
 
 import carcassonne.control.ControllerFacade;
 import carcassonne.model.Player;

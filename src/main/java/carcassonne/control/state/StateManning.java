@@ -1,5 +1,6 @@
 package carcassonne.control.state;
 
+import carcassonne.control.telemetry.TelemetryManager;
 import carcassonne.model.Meeple;
 import carcassonne.model.Player;
 import carcassonne.model.ai.AbstractCarcassonneMove;
@@ -122,6 +123,7 @@ public class StateManning extends AbstractGameState {
         } else {
             if (!round.getActivePlayer().isComputerControlled()) {
                 views.onMainView(MainView::resetPlacementHighlights);
+                TelemetryManager.getInstance().finishRound();
             }
             round.nextTurn();
             views.onMainView(it -> it.setCurrentPlayer(round.getActivePlayer()));

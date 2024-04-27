@@ -3,6 +3,7 @@ package carcassonne.control.state;
 import java.util.Collection;
 import java.util.Optional;
 
+import carcassonne.control.telemetry.TelemetryManager;
 import carcassonne.model.Player;
 import carcassonne.model.ai.AbstractCarcassonneMove;
 import carcassonne.model.ai.ArtificialIntelligence;
@@ -89,19 +90,23 @@ public class StatePlacing extends AbstractGameState {
         if (!round.getActivePlayer().isComputerControlled()) {
             views.onMainView(MainView::resetPlacementHighlights);
         }
+        TelemetryManager.getInstance().finishRound();
         round.nextTurn();
         views.onMainView(it -> it.setCurrentPlayer(round.getActivePlayer()));
         entry();
     }
 
     private void placeTile(Tile tile, int x, int y, boolean highlightPlacement) {
-        if (grid.place(x, y, tile)) {
+        var isValidPlacement = grid.place(x, y, tile);
+        if (isValidPlacement) {
             round.getActivePlayer().dropTile(tile);
             views.onMainView(it -> it.setTile(tile, x, y));
             if (highlightPlacement) {
                 views.onMainView(view -> view.setPlacementHighlight(x, y));
             }
             changeState(StateManning.class);
+        } else {
+            TelemetryManager.getInstance().addMisClick();
         }
     }
 

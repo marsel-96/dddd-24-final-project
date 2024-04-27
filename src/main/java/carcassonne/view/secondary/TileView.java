@@ -178,6 +178,7 @@ public class TileView extends SecondaryView {
             tileLabels.add(label);
             constraints.gridy++;
             final int index = i;
+            // TODO WTF
             label.addMouseListener((MouseClickListener) event -> selectTileLabel(index));
             dialogPanel.add(label, constraints);
         }

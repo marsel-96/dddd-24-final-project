@@ -4,6 +4,7 @@ import java.awt.EventQueue;
 import java.lang.reflect.InvocationTargetException;
 
 import carcassonne.control.state.StateMachine;
+import carcassonne.control.telemetry.TelemetryManager;
 import carcassonne.model.ai.ArtificialIntelligence;
 import carcassonne.model.ai.RuleBasedAI;
 import carcassonne.model.grid.GridDirection;
@@ -90,6 +91,8 @@ public class MainController implements ControllerFacade {
      */
     @Override
     public void requestNewRound() {
+        TelemetryManager.getInstance().newSession();
+        TelemetryManager.getInstance().setAdvancedHighlightEnabled(settings.isAdvancedTileHighlight());
         stateMachine.getCurrentState().newRound(settings.getNumberOfPlayers());
     }
 
@@ -98,16 +101,19 @@ public class MainController implements ControllerFacade {
      */
     @Override
     public void requestSkip() {
+        TelemetryManager.getInstance().addSkipClick();
         stateMachine.getCurrentState().skip();
     }
 
     @Override
     public void requestRotate(RotationDirection rotationDirection) {
+        TelemetryManager.getInstance().addRotationClick();
         stateMachine.getCurrentState().rotate(rotationDirection);
     }
 
     @Override
     public void requestRevert() {
+        TelemetryManager.getInstance().addCancelClick();
         stateMachine.getCurrentState().revert();
     }
 
@@ -118,6 +124,7 @@ public class MainController implements ControllerFacade {
      */
     @Override
     public void requestTilePlacement(int x, int y) {
+        TelemetryManager.getInstance().addTilePlacementClick();
         stateMachine.getCurrentState().placeTile(x, y);
     }
 

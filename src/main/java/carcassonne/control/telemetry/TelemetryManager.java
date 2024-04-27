@@ -2,8 +2,10 @@ package carcassonne.control.telemetry;
 
 import carcassonne.control.telemetry.connector.TelemetryConnector;
 import carcassonne.control.telemetry.connector.impl.GoogleFormsTelemetryConnector;
+import carcassonne.model.telemetry.AdvancedTelemetryData;
 import carcassonne.model.telemetry.TelemetryData;
 
+import javax.swing.*;
 import java.awt.*;
 import java.io.IOException;
 import java.net.URI;
@@ -22,7 +24,6 @@ public class TelemetryManager {
 
     private final String userId;
     private String sessionId;
-
     private int roundId;
     private boolean advancedHighlightEnabled;
 
@@ -30,32 +31,34 @@ public class TelemetryManager {
     private int misclicks;
     private int rotationClicks;
     private int skipClicks;
+    private int cancelClicks;
+    private int tilePlacementClicks;
+    private Instant startRound;
+    private final Timer mousePositionCapture;
+    private final java.util.List<int[]> mousePositions;
 
-    public void addCancelClicks() {
+    private boolean enabled = false;
+
+    public void addCancelClick() {
         this.cancelClicks++;
     }
-    public void addSkipClicks() {
+    public void addSkipClick() {
         this.skipClicks++;
     }
-    public void addRotationClicks() {
+    public void addRotationClick() {
         this.rotationClicks++;
     }
-    public void addMisclicks() {
+    public void addTilePlacementClick() {
+        this.tilePlacementClicks++;
+    }
+    public void addMisClick() {
         this.misclicks++;
     }
-    public void addClicks() {
-        this.clicks++;
-    }
-    public void nextRound() {
-        this.roundId++;
-        this.clicks = 0;
-        this.misclicks = 0;
-        this.rotationClicks = 0;
-        this.skipClicks = 0;
-        this.cancelClicks = 0;
-    }
     public void newSession() {
-        nextRound();
+        var now = Instant.now();
+
+        clearRoundData(now);
+        startMousePositionCapture();
 
         this.sessionId = UUID.randomUUID().toString();
         this.roundId = 1;
@@ -64,22 +67,43 @@ public class TelemetryManager {
         this.advancedHighlightEnabled = status;
     }
 
-    private int cancelClicks;
+    public String getUserId() {
+        return userId;
+    }
 
-    private Instant startRound;
+    public void startMousePositionCapture() {
+        mousePositions.clear();
+        mousePositionCapture.start();
+    }
 
     public static TelemetryManager getInstance() {
         if (instance == null) {
             instance = new TelemetryManager();
         }
+
         return instance;
+    }
+
+    private void clearRoundData(Instant startRound) {
+        this.clicks = 0;
+        this.misclicks = 0;
+        this.rotationClicks = 0;
+        this.skipClicks = 0;
+        this.cancelClicks = 0;
+        this.tilePlacementClicks = 0;
+        this.startRound = startRound;
     }
 
     private TelemetryManager() {
         connector = new GoogleFormsTelemetryConnector();
         userId = UUID.randomUUID().toString();
+        mousePositions = new java.util.ArrayList<>();
+        mousePositionCapture = new Timer(500, e -> {
+            Point p = MouseInfo.getPointerInfo().getLocation();
+            mousePositions.add(new int [] {p.x, p.y});
+        });
 
-        if (Desktop.isDesktopSupported() && Desktop.getDesktop().isSupported(Desktop.Action.BROWSE)) {
+        if (enabled && Desktop.isDesktopSupported() && Desktop.getDesktop().isSupported(Desktop.Action.BROWSE)) {
             try {
                 var url = String.format(GOOGLE_MAIN_FORM_URL, userId);
                 Desktop.getDesktop()
@@ -90,28 +114,34 @@ public class TelemetryManager {
         }
     }
 
-    public void sendTelemetryData() {
+    public void finishRound() {
         var now = Instant.now();
         var roundTime = Duration.between(startRound, now);
 
-        connector.sendTelemetryData(
-                new TelemetryData(
-                        userId,
-                        advancedHighlightEnabled,
-                        sessionId,
-                        roundId,
-                        clicks,
-                        misclicks,
-                        "[]",
-                        roundTime.truncatedTo(ChronoUnit.MILLIS),
-                        now.truncatedTo(ChronoUnit.MILLIS),
-                        rotationClicks,
-                        skipClicks,
-                        cancelClicks
-                )
-        );
+        if (enabled) {
+            connector.sendTelemetryData(
+                    new TelemetryData(
+                            userId,
+                            advancedHighlightEnabled,
+                            sessionId,
+                            roundId,
+                            clicks,
+                            misclicks,
+                            new AdvancedTelemetryData(500, mousePositions),
+                            roundTime.truncatedTo(ChronoUnit.MILLIS),
+                            now.truncatedTo(ChronoUnit.MILLIS),
+                            rotationClicks,
+                            skipClicks,
+                            cancelClicks,
+                            tilePlacementClicks
+                    )
+            );
+        }
 
-        startRound = now;
+        clearRoundData(now);
+
+        this.roundId++;
+        startMousePositionCapture();
     }
 
 }

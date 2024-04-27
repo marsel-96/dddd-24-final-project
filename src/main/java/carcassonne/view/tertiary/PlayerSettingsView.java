@@ -19,6 +19,7 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JRadioButton;
 
+import carcassonne.control.telemetry.TelemetryManager;
 import carcassonne.model.terrain.TerrainType;
 import carcassonne.model.tile.TileDistribution;
 import carcassonne.settings.GameSettings;
@@ -123,6 +124,7 @@ public class PlayerSettingsView extends JDialog implements NotifiableView {
         addWithBox(mainPanel, createTileHighlightPanel());
         addWithBox(mainPanel, createScoreSplittingPanel());
         addWithBox(mainPanel, createDualPanel());
+        addWithBox(mainPanel, createUserIdPanel());
         mainPanel.add(createCloseButton());
         getContentPane().add(mainPanel);
     }
@@ -249,6 +251,12 @@ public class PlayerSettingsView extends JDialog implements NotifiableView {
         for (TerrainType type : TerrainType.basicTerrain()) {
             createPlacementRuleButton(type, panel);
         }
+        return panel;
+    }
+
+    private JPanel createUserIdPanel() {
+        JPanel panel = createBasicPanel("User ID:");
+        panel.add(new JLabel(TelemetryManager.getInstance().getUserId()));
         return panel;
     }
 

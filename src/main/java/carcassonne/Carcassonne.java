@@ -6,6 +6,7 @@ import javax.swing.UIManager.LookAndFeelInfo;
 import javax.swing.UnsupportedLookAndFeelException;
 
 import carcassonne.control.MainController;
+import carcassonne.control.telemetry.TelemetryManager;
 import carcassonne.view.util.GameMessage;
 
 /**
@@ -27,6 +28,7 @@ public final class Carcassonne {
     public static void main(String[] args) {
         setLookAndFeel();
         ToolTipManager.sharedInstance().setDismissDelay(TOOL_TIP_DISMISS_DELAY_IN_MILLISECONDS);
+        TelemetryManager.getInstance();
         new MainController().startGame();
     }
 

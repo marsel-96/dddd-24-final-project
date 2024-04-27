@@ -10,10 +10,10 @@ public record TelemetryData(
         int roundId,
         int clicks,
         int misclicks,
-        String telemetry,
+        AdvancedTelemetryData telemetry,
         Duration roundTime,
         Instant timestamp,
         int rotationClicks,
         int skipClicks,
-        int cancelClicks
-) { }
+        int cancelClicks,
+        int tilePlacementClicks) { }

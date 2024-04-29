@@ -9,6 +9,7 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
+import carcassonne.control.telemetry.TelemetryManager;
 import carcassonne.model.Player;
 import carcassonne.model.terrain.TerrainType;
 import carcassonne.model.tile.TileDistribution;
@@ -86,7 +87,7 @@ public class GameSettings {
         stackSizeMultiplier = 1;
         gridWidth = 29;
         gridHeight = 19;
-        advancedTileHighlight = false;
+        advancedTileHighlight = TelemetryManager.getInstance().getAdvancedHighlightEnabledDefault();
         allowEnclaves = true;
         changeListeners = new ArrayList<>();
     }

@@ -102,7 +102,6 @@ public class MainController implements ControllerFacade {
      */
     @Override
     public void requestSkip() {
-        TelemetryManager.getInstance().addSkipClick();
         stateMachine.getCurrentState().skip();
     }
 

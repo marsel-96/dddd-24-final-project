@@ -76,6 +76,7 @@ public class StatePlacing extends AbstractGameState {
     @Override
     public void skip() {
         if (!round.getActivePlayer().isComputerControlled()) {
+            TelemetryManager.getInstance().addSkipClick();
             skipPlacingTile();
         }
     }

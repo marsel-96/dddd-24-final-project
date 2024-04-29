@@ -7,6 +7,7 @@ import carcassonne.model.telemetry.TelemetryData;
 
 import javax.swing.*;
 import java.awt.*;
+import java.io.File;
 import java.io.IOException;
 import java.time.Duration;
 import java.time.Instant;
@@ -154,4 +155,7 @@ public class TelemetryManager {
         startMousePositionCapture();
     }
 
+    public boolean getAdvancedHighlightEnabledDefault() {
+        return new File("highlight").isFile();
+    }
 }

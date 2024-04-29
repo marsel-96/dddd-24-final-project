@@ -8,8 +8,6 @@ import carcassonne.model.telemetry.TelemetryData;
 import javax.swing.*;
 import java.awt.*;
 import java.io.IOException;
-import java.net.URI;
-import java.net.URISyntaxException;
 import java.time.Duration;
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
@@ -17,7 +15,7 @@ import java.util.UUID;
 
 public class TelemetryManager {
 
-    private static final String GOOGLE_MAIN_FORM_URL = "https://docs.google.com/forms/d/e/1FAIpQLSemiSai7-r-kTReoaNpQPptTFVfiNox-WZcSb6KmIHgE79oFw/viewform?usp=pp_url&entry.243585258=%s";
+    private static final String GOOGLE_MAIN_FORM_URL = "https://docs.google.com/forms/d/e/1FAIpQLSemiSai7-r-kTReoaNpQPptTFVfiNox-WZcSb6KmIHgE79oFw/viewform?usp=pp_url&entry.243585258=%s&hl=en";
 
     private static TelemetryManager instance;
     private final TelemetryConnector connector;
@@ -63,6 +61,12 @@ public class TelemetryManager {
         this.sessionId = UUID.randomUUID().toString();
         this.roundId = 1;
     }
+    public void abortGame() {
+        finishRound();
+        this.sessionId = "NULL";
+        this.roundId = 0;
+    }
+
     public void setAdvancedHighlightEnabled(boolean status) {
         this.advancedHighlightEnabled = status;
     }
@@ -94,6 +98,16 @@ public class TelemetryManager {
         this.startRound = startRound;
     }
 
+    public void openQuestionnaire() {
+        try {
+            Runtime.getRuntime().exec(
+                    String.format("cmd.exe /c start chrome --incognito \"%s\"", String.format(GOOGLE_MAIN_FORM_URL, userId))
+            );
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
     private TelemetryManager() {
         connector = new GoogleFormsTelemetryConnector();
         userId = UUID.randomUUID().toString();
@@ -103,14 +117,10 @@ public class TelemetryManager {
             mousePositions.add(new int [] {p.x, p.y});
         });
 
-        if (enabled && Desktop.isDesktopSupported() && Desktop.getDesktop().isSupported(Desktop.Action.BROWSE)) {
-            try {
-                var url = String.format(GOOGLE_MAIN_FORM_URL, userId);
-                Desktop.getDesktop()
-                        .browse(new URI(url));
-            } catch (IOException | URISyntaxException e) {
-                throw new RuntimeException(e);
-            }
+        if (enabled) {
+            Timer timer = new Timer(3000, ignore -> openQuestionnaire());
+            timer.setRepeats(false);
+            timer.start();
         }
     }
 

@@ -78,6 +78,7 @@ public class GameSettings {
         playerTypes = new ArrayList<>(Arrays.asList(false, true, true, true, true));
         meepleRules = new HashMap<>();
         TerrainType.basicTerrain().forEach(it -> meepleRules.put(it, true));
+        meepleRules.put(TerrainType.FIELDS, false);
         tileDistribution = new TileDistribution();
         setDistanceMeasure(MinkowskiDistance.ROUNDED_SQUARE);
         numberOfPlayers = 2;

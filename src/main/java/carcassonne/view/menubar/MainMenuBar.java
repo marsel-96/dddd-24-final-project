@@ -6,6 +6,7 @@ import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 
 import carcassonne.control.ControllerFacade;
+import carcassonne.control.telemetry.TelemetryManager;
 import carcassonne.settings.GameSettings;
 import carcassonne.view.main.MainView;
 import carcassonne.view.tertiary.GridSizeDialog;
@@ -99,8 +100,10 @@ public class MainMenuBar extends JMenuBar {
         itemNewRound = new JMenuItem(NEW_ROUND);
         itemAbortRound = new JMenuItem(ABORT);
         JMenuItem itemAbout = new JMenuItem(ABOUT);
+        JMenuItem openQuestionnaire = new JMenuItem("Open Questionnaire");
         itemAbortRound.setEnabled(false);
         itemAbout.addActionListener(event -> GameMessage.showGameInfo());
+        openQuestionnaire.addActionListener(event -> TelemetryManager.getInstance().openQuestionnaire());
         itemNewRound.addActionListener(new NewRoundListener(controller, itemNewRound, itemAbortRound));
         itemAbortRound.addActionListener(new AbortRoundListener(controller, itemNewRound, itemAbortRound));
         JMenu menuGame = new JMenu(GAME);
@@ -108,6 +111,7 @@ public class MainMenuBar extends JMenuBar {
         menuGame.add(itemAbortRound);
         menuGame.addSeparator();
         menuGame.add(itemAbout);
+        menuGame.add(openQuestionnaire);
         add(menuGame);
     }
 

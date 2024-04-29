@@ -6,7 +6,7 @@
 
   <groupId>dk.itu.dddd</groupId>
   <artifactId>carcassonne</artifactId>
-  <version>0.2</version>
+  <version>0.7</version>
 
   <name>carcassonne</name>
   <organization>
@@ -60,6 +60,35 @@
             </archive>
             <outputDirectory>target/build</outputDirectory>
           </configuration>
+          <executions>
+            <execution>
+              <id>default-jar</id>
+              <phase>none</phase>
+            </execution>
+          </executions>
+        </plugin>
+        <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-assembly-plugin</artifactId>
+          <version>3.3.0</version>
+          <configuration>
+            <archive>
+              <manifestFile>META-INF/MANIFEST.MF</manifestFile>
+            </archive>
+            <outputDirectory>target/build</outputDirectory>
+            <descriptorRefs>
+              <descriptorRef>jar-with-dependencies</descriptorRef>
+            </descriptorRefs>
+          </configuration>
+          <executions>
+            <execution>
+              <id>make-assembly</id>
+              <phase>package</phase>
+              <goals>
+                <goal>single</goal>
+              </goals>
+            </execution>
+          </executions>
         </plugin>
         <plugin>
           <groupId>org.panteleyev</groupId>
@@ -69,7 +98,7 @@
             <name>${project.name}</name>
             <appVersion>${project.version}</appVersion>
             <type>APP_IMAGE</type>
-            <mainJar>${project.artifactId}-${project.version}.jar</mainJar>
+            <mainJar>${project.artifactId}-${project.version}-jar-with-dependencies.jar</mainJar>
             <destination>target/jpackage</destination>
             <input>target/build</input>
             <icon>icon.ico</icon>

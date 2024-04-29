@@ -64,6 +64,7 @@ public class MainController implements ControllerFacade {
      */
     @Override
     public void requestAbortGame() {
+        TelemetryManager.getInstance().abortGame();
         stateMachine.getCurrentState().abortGame();
         stateMachine.setAbortRequested(false);
     }
